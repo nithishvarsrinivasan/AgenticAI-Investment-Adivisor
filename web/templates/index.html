@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Investment Analysis App</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 2rem; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    textarea { width: 100%; height: 180px; }
+    pre { background: #111; color: #eee; padding: 1rem; border-radius: .5rem; overflow: auto; }
+    .card { border: 1px solid #ddd; padding: 1rem; border-radius: .5rem; }
+    button { padding: .6rem 1rem; border: 0; border-radius: .4rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Investment Analysis App</h1>
+  <div class="card">
+    <label>Stock Symbol:</label>
+    <input id="symbol" placeholder="e.g., AAPL" />
+    <button onclick="analyze()">Analyze</button>
+  </div>
+
+  <div class="row" style="margin-top: 1rem;">
+    <div class="card">
+      <h3>Analysis</h3>
+      <div id="analysis"></div>
+    </div>
+    <div class="card">
+      <h3>Recommendation</h3>
+      <div id="recommendation"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 1rem;">
+    <h3>Train Q&A model on the current analysis</h3>
+    <button onclick="train()">Train</button>
+    <p id="train_status"></p>
+  </div>
+
+  <div class="card">
+    <h3>Ask a question (after training)</h3>
+    <input id="question" placeholder="Is it a buy?" style="width: 70%;" />
+    <button onclick="ask()">Ask</button>
+    <pre id="answer"></pre>
+  </div>
+
+<script>
+async function analyze() {
+  const symbol = document.getElementById('symbol').value.trim();
+  if(!symbol) { alert('Enter a symbol'); return; }
+  const resp = await fetch('/analyze', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({symbol})
+  });
+  const data = await resp.json();
+  if(data.error){ alert(data.error); return; }
+  document.getElementById('analysis').innerHTML = data.analysis || '';
+  document.getElementById('recommendation').innerHTML = data.recommendation || '';
+}
+
+async function train() {
+  const analysis = document.getElementById('analysis').innerText || '';
+  const recommendation = document.getElementById('recommendation').innerText || '';
+  const resp = await fetch('/train_model', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({analysis, recommendation})
+  });
+  const data = await resp.json();
+  document.getElementById('train_status').innerText = data.message || data.error || '';
+}
+
+async function ask() {
+  const question = document.getElementById('question').value.trim();
+  const resp = await fetch('/ask_question', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({question})
+  });
+  const data = await resp.json();
+  document.getElementById('answer').innerText = data.answer || data.error || '';
+}
+</script>
+</body>
+</html>

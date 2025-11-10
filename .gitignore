@@ -1,0 +1,46 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.sqlite3
+
+# Virtual environment
+.venv/
+env/
+venv/
+ENV/
+
+# Jupyter / IPython
+.ipynb_checkpoints/
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# IDE files
+.vscode/
+.idea/
+*.code-workspace
+
+# Logs
+logs/
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Node (if you ever add frontend)
+node_modules/
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# Cache
+.cache/
+.cache/*

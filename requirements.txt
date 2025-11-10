@@ -1,0 +1,25 @@
+# Core web
+Flask
+python-dotenv
+markdown2
+flask-cors
+
+# CrewAI and tools
+crewai
+crewai-tools
+
+# LLM / OpenAI-compatible (OpenRouter is OpenAI-compatible)
+openai
+
+# Data & NLP
+numpy>=1.24.0
+scikit-learn>=1.3.0
+nltk>=3.8.1
+pandas>=2.0.0
+
+# Finance & Search
+yfinance
+duckduckgo-search
+
+# HTTP with browser impersonation (used by yfinance to be more reliable)
+curl_cffi
